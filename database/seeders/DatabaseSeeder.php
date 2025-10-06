@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             SchoolSeeder::class,
             OrderSeeder::class,
             PalletSeeder::class,
+            PalletOrderSeeder::class,
         ]);
     }
 }
