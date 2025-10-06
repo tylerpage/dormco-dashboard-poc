@@ -228,7 +228,6 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="goToPalletBtn" style="display: none;">Go to Pallet</button>
             </div>
         </div>
     </div>
@@ -289,10 +288,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Stop scanning
         html5QrcodeScanner.clear();
         
-        // Show result
-        document.getElementById('qr-result').textContent = decodedText;
-        document.getElementById('qr-reader-results').style.display = 'block';
-        
         // Check if it's a pallet URL or pallet number
         let palletNumber = null;
         
@@ -308,12 +303,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         if (palletNumber) {
-            document.getElementById('goToPalletBtn').style.display = 'inline-block';
-            document.getElementById('goToPalletBtn').onclick = function() {
-                window.location.href = `/pallets/${palletNumber}`;
-            };
+            // Automatically redirect to pallet
+            window.location.href = `/pallets/${palletNumber}`;
         } else {
-            document.getElementById('goToPalletBtn').style.display = 'none';
+            // Show error message for invalid QR codes
+            document.getElementById('qr-result').textContent = 'Invalid QR code - not a pallet';
+            document.getElementById('qr-reader-results').style.display = 'block';
         }
     }
 
