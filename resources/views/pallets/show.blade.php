@@ -12,6 +12,9 @@
                     </p>
                 </div>
                 <div>
+                    <a href="{{ route('pallets.orders', $pallet) }}" class="btn btn-outline-info">
+                        <i class="fas fa-list"></i> View Orders
+                    </a>
                     <button class="btn btn-outline-success" onclick="printQRCode('{{ $pallet->pallet_number }}')">
                         <i class="fas fa-qrcode"></i> Print QR Code
                     </button>
@@ -460,5 +463,7 @@ function printQRCode(palletNumber) {
         }, 1000);
     };
 }
+
 </script>
+
 @endpush

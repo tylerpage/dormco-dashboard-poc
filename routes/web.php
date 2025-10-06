@@ -30,9 +30,12 @@ Route::middleware(['auth'])->group(function () {
     // Pallets - Staff need 'pallets' permission, School users cannot access
     Route::middleware(['permission:pallets'])->group(function () {
         Route::resource('pallets', PalletController::class);
+        Route::get('pallets/{pallet}/orders', [PalletController::class, 'orders'])->name('pallets.orders');
         Route::post('pallets/import', [PalletController::class, 'import'])->name('pallets.import');
         Route::post('pallets/{pallet}/upload-photo', [PalletController::class, 'uploadPhoto'])->name('pallets.upload-photo');
         Route::delete('pallet-photos/{photo}', [PalletController::class, 'deletePhoto'])->name('pallet-photos.delete');
+        Route::post('pallets/{pallet}/verify-order/{order}', [PalletController::class, 'verifyOrder'])->name('pallets.verify-order');
+        Route::post('pallets/{pallet}/unverify-order/{order}', [PalletController::class, 'unverifyOrder'])->name('pallets.unverify-order');
     });
     
     // Schools - Staff need 'schools' permission

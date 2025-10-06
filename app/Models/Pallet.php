@@ -59,6 +59,11 @@ class Pallet extends Model
         return $this->hasMany(Order::class, 'pallet_number', 'pallet_number');
     }
 
+    public function palletOrders(): HasMany
+    {
+        return $this->hasMany(PalletOrder::class);
+    }
+
     /**
      * Get formatted shipping address
      */

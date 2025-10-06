@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pallet;
+use App\Models\Order;
 use App\Models\School;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -104,7 +105,7 @@ class PalletController extends Controller
      */
     public function show(Pallet $pallet)
     {
-        $pallet->load(['school', 'creator', 'photos.uploadedBy', 'actions.performedBy', 'orders.school']);
+        $pallet->load(['school', 'creator', 'photos.uploadedBy', 'actions.performedBy', 'orders.school', 'palletOrders.order', 'palletOrders.verifiedBy']);
         return view('pallets.show', compact('pallet'));
     }
 
@@ -288,5 +289,86 @@ class PalletController extends Controller
         $photo->delete(); // Soft delete
 
         return redirect()->back()->with('success', 'Photo deleted successfully.');
+    }
+
+    /**
+     * Display orders for a pallet
+     */
+    public function orders(Pallet $pallet)
+    {
+        $pallet->load(['orders.school', 'palletOrders.order', 'palletOrders.verifiedBy']);
+        return view('pallets.orders', compact('pallet'));
+    }
+
+    /**
+     * Verify an order is on a pallet
+     */
+    public function verifyOrder(Request $request, Pallet $pallet, Order $order)
+    {
+        try {
+            // Check if the order is assigned to this pallet
+            if ($order->pallet_number !== $pallet->pallet_number) {
+                return redirect()->back()->with('error', 'Order is not assigned to this pallet.');
+            }
+
+            // Create or update the pallet order verification
+            $palletOrder = \App\Models\PalletOrder::updateOrCreate(
+                [
+                    'pallet_id' => $pallet->id,
+                    'order_id' => $order->id,
+                ],
+                [
+                    'verified' => true,
+                    'verified_at' => now(),
+                    'verified_by' => Auth::id(),
+                ]
+            );
+
+            // Log the verification action
+            $pallet->actions()->create([
+                'action_type' => 'order_verified',
+                'description' => "Order #{$order->order_number} verified as being on pallet",
+                'performed_by' => Auth::id(),
+            ]);
+
+            return redirect()->back()->with('success', "Order #{$order->order_number} verified successfully.");
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error verifying order: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Unverify an order from a pallet
+     */
+    public function unverifyOrder(Request $request, Pallet $pallet, Order $order)
+    {
+        try {
+            // Find the pallet order record
+            $palletOrder = \App\Models\PalletOrder::where('pallet_id', $pallet->id)
+                ->where('order_id', $order->id)
+                ->first();
+
+            if (!$palletOrder) {
+                return redirect()->back()->with('error', 'Order verification not found.');
+            }
+
+            // Update the verification status
+            $palletOrder->update([
+                'verified' => false,
+                'verified_at' => null,
+                'verified_by' => null,
+            ]);
+
+            // Log the unverification action
+            $pallet->actions()->create([
+                'action_type' => 'order_unverified',
+                'description' => "Order #{$order->order_number} unverified from pallet",
+                'performed_by' => Auth::id(),
+            ]);
+
+            return redirect()->back()->with('success', "Order #{$order->order_number} unverified successfully.");
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error unverifying order: ' . $e->getMessage());
+        }
     }
 }
