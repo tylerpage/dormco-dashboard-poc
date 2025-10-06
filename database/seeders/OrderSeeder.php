@@ -8,6 +8,7 @@ use App\Models\School;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Faker\Factory as Faker;
 
 class OrderSeeder extends Seeder
 {
@@ -16,6 +17,7 @@ class OrderSeeder extends Seeder
      */
     public function run(): void
     {
+        $faker = Faker::create();
         $schools = School::all();
         $users = User::all();
         
@@ -157,10 +159,10 @@ class OrderSeeder extends Seeder
             for ($i = 1; $i <= $itemCount; $i++) {
                 OrderItem::create([
                     'order_id' => $order->id,
-                    'item_name' => "Item {$i} - " . fake()->words(2, true),
-                    'description' => fake()->sentence(),
+                    'item_name' => "Item {$i} - " . $faker->words(2, true),
+                    'description' => $faker->sentence(),
                     'quantity' => rand(1, 3),
-                    'price' => fake()->randomFloat(2, 10, 100),
+                    'price' => $faker->randomFloat(2, 10, 100),
                 ]);
             }
             
