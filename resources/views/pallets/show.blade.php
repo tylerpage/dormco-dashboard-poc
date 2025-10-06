@@ -127,8 +127,8 @@
                             </div>
 
                             <!-- Image Modal for {{ $photo->id }} -->
-                            <div class="modal fade" id="imageModal{{ $photo->id }}" tabindex="-1">
-                                <div class="modal-dialog modal-lg">
+                            <div class="modal fade" id="imageModal{{ $photo->id }}" tabindex="-1" aria-labelledby="imageModal{{ $photo->id }}Label" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title">Pallet Photo</h5>
@@ -301,8 +301,8 @@
 </div>
 
 <!-- Upload Photo Modal -->
-<div class="modal fade" id="uploadPhotoModal" tabindex="-1">
-    <div class="modal-dialog">
+<div class="modal fade" id="uploadPhotoModal" tabindex="-1" aria-labelledby="uploadPhotoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <form action="{{ route('pallets.upload-photo', $pallet) }}" method="POST" enctype="multipart/form-data">
                 @csrf

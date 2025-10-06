@@ -8,7 +8,6 @@ use App\Models\School;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Faker\Factory as Faker;
 
 class OrderSeeder extends Seeder
 {
@@ -17,7 +16,6 @@ class OrderSeeder extends Seeder
      */
     public function run(): void
     {
-        $faker = Faker::create();
         $schools = School::all();
         $users = User::all();
         
@@ -159,10 +157,10 @@ class OrderSeeder extends Seeder
             for ($i = 1; $i <= $itemCount; $i++) {
                 OrderItem::create([
                     'order_id' => $order->id,
-                    'item_name' => "Item {$i} - " . $faker->words(2, true),
-                    'description' => $faker->sentence(),
+                    'item_name' => "Item {$i} - " . $this->getRandomItemName(),
+                    'description' => $this->getRandomDescription(),
                     'quantity' => rand(1, 3),
-                    'price' => $faker->randomFloat(2, 10, 100),
+                    'price' => rand(1000, 10000) / 100, // Random price between $10.00 and $100.00
                 ]);
             }
             
@@ -184,5 +182,30 @@ class OrderSeeder extends Seeder
                 ]);
             }
         }
+    }
+
+    private function getRandomItemName()
+    {
+        $items = [
+            'Textbook', 'Notebook', 'Pen Set', 'Calculator', 'Laptop Case',
+            'Desk Lamp', 'Backpack', 'Water Bottle', 'Coffee Mug', 'Sticky Notes',
+            'Highlighters', 'Binder', 'Folder', 'Index Cards', 'Erasers'
+        ];
+        return $items[array_rand($items)];
+    }
+
+    private function getRandomDescription()
+    {
+        $descriptions = [
+            'High quality item for academic use',
+            'Essential supplies for students',
+            'Durable and reliable product',
+            'Perfect for classroom environment',
+            'Premium quality materials',
+            'Student-friendly design',
+            'Educational tool for learning',
+            'Comfortable and ergonomic design'
+        ];
+        return $descriptions[array_rand($descriptions)];
     }
 }

@@ -146,8 +146,8 @@
 </div>
 
 <!-- Import Modal -->
-<div class="modal fade" id="importModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <form action="{{ route('pallets.import') }}" method="POST">
                 @csrf
@@ -208,8 +208,8 @@
 </div>
 
 <!-- QR Scanner Modal -->
-<div class="modal fade" id="qrScannerModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade" id="qrScannerModal" tabindex="-1" aria-labelledby="qrScannerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Scan QR Code</h5>

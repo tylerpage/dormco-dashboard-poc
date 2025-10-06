@@ -164,8 +164,8 @@
                             </div>
 
                             <!-- Image Modal for {{ $photo->id }} -->
-                            <div class="modal fade" id="imageModal{{ $photo->id }}" tabindex="-1">
-                                <div class="modal-dialog modal-lg">
+                            <div class="modal fade" id="imageModal{{ $photo->id }}" tabindex="-1" aria-labelledby="imageModal{{ $photo->id }}Label" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title">Order Photo</h5>
@@ -312,8 +312,8 @@
 </div>
 
 <!-- Update Shipping Modal -->
-<div class="modal fade" id="updateShippingModal" tabindex="-1">
-    <div class="modal-dialog">
+<div class="modal fade" id="updateShippingModal" tabindex="-1" aria-labelledby="updateShippingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <form action="{{ route('orders.update-shipping', $order) }}" method="POST">
                 @csrf
@@ -398,8 +398,8 @@
 </div>
 
 <!-- Upload Photos Modal -->
-<div class="modal fade" id="uploadPhotosModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade" id="uploadPhotosModal" tabindex="-1" aria-labelledby="uploadPhotosModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <form action="{{ route('orders.upload-photos', $order) }}" method="POST" enctype="multipart/form-data">
                 @csrf
