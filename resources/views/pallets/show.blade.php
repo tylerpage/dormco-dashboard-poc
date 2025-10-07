@@ -106,7 +106,7 @@ use Illuminate\Support\Facades\Storage;
                             @forelse($pallet->photos as $photo)
                             <div class="row border-bottom py-3">
                                 <div class="col-md-4">
-                                    <img src="{{ Storage::url($photo->photo_path) }}" alt="Pallet Photo" 
+                                    <img src="{{ $photo->getSignedUrl() }}" alt="Pallet Photo" 
                                          class="img-thumbnail w-100" style="max-height: 200px; object-fit: cover; cursor: pointer;"
                                          data-bs-toggle="modal" data-bs-target="#imageModal{{ $photo->id }}">
                                 </div>
@@ -139,7 +139,7 @@ use Illuminate\Support\Facades\Storage;
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <div class="modal-body text-center">
-                                            <img src="{{ Storage::url($photo->photo_path) }}" 
+                                            <img src="{{ $photo->getSignedUrl() }}" 
                                                  alt="Pallet Photo" class="img-fluid" style="max-height: 70vh;">
                                             <div class="mt-3">
                                                 <strong>Uploaded by:</strong> {{ $photo->uploadedBy->name }}<br>

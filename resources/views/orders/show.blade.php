@@ -155,7 +155,7 @@ use Illuminate\Support\Facades\Storage;
                             @forelse($order->photos as $photo)
                             <div class="row border-bottom py-3">
                                 <div class="col-md-3">
-                                    <img src="{{ Storage::url($photo->photo_path) }}" alt="Order Photo" 
+                                    <img src="{{ $photo->getSignedUrl() }}" alt="Order Photo" 
                                          class="img-thumbnail" style="max-width: 150px; max-height: 150px; cursor: pointer;"
                                          data-bs-toggle="modal" data-bs-target="#imageModal{{ $photo->id }}">
                                 </div>
@@ -190,7 +190,7 @@ use Illuminate\Support\Facades\Storage;
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <div class="modal-body text-center">
-                                            <img src="{{ Storage::url($photo->photo_path) }}" 
+                                            <img src="{{ $photo->getSignedUrl() }}" 
                                                  alt="Order Photo" class="img-fluid" style="max-height: 70vh;">
                                             <div class="mt-3">
                                                 <strong>Uploaded by:</strong> {{ $photo->uploadedBy->name }}<br>
@@ -235,7 +235,7 @@ use Illuminate\Support\Facades\Storage;
                                 </div>
                                 <div class="col-md-4 text-end">
                                     @if($item->photo_path)
-                                        <img src="{{ Storage::url($item->photo_path) }}" alt="{{ $item->item_name }}" 
+                                        <img src="{{ Storage::disk('public')->temporaryUrl($item->photo_path, now()->addMinutes(60)) }}" alt="{{ $item->item_name }}" 
                                              class="img-thumbnail" style="max-width: 100px; max-height: 100px;">
                                     @else
                                         <span class="text-muted">No photo</span>
