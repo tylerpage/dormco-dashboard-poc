@@ -30,85 +30,64 @@ class PalletSeeder extends Seeder
             $user = $users->first();
         }
 
-        $pallets = [
-            [
-                'pallet_number' => 'PAL-001',
-                'status' => 'packing',
-                'location' => 'Warehouse A',
-                'lot' => 'LOT-2024-001',
+        // Generate 50 pallets
+        $pallets = [];
+        $statuses = ['packing', 'shipped', 'delivered'];
+        $locations = ['Warehouse A', 'Warehouse B', 'Warehouse C', 'Distribution Center', 'Loading Dock', 'Storage Facility'];
+        $cities = ['Berkeley', 'Stanford', 'Los Angeles', 'Pasadena', 'San Diego', 'Davis', 'Irvine', 'San Francisco', 'Oakland', 'Fresno'];
+        $states = ['CA', 'NY', 'TX', 'FL', 'IL', 'PA', 'OH', 'GA', 'NC', 'MI'];
+        
+        for ($i = 1; $i <= 50; $i++) {
+            $palletNumber = 'PAL-' . str_pad($i, 3, '0', STR_PAD_LEFT);
+            $status = $statuses[array_rand($statuses)];
+            $location = $locations[array_rand($locations)];
+            $city = $cities[array_rand($cities)];
+            $state = $states[array_rand($states)];
+            $zip = rand(10000, 99999);
+            
+            $pallet = [
+                'pallet_number' => $palletNumber,
+                'status' => $status,
+                'location' => $location,
+                'lot' => 'LOT-2024-' . str_pad($i, 3, '0', STR_PAD_LEFT),
                 'school_id' => $schools->random()->id,
-                'shipping_address_1' => '123 Main Street',
-                'shipping_city' => 'Berkeley',
-                'shipping_state' => 'CA',
-                'shipping_zip' => '94720',
-                'notes' => 'Priority pallet for rush orders',
-            ],
-            [
-                'pallet_number' => 'PAL-002',
-                'status' => 'shipped',
-                'location' => 'Warehouse B',
-                'lot' => 'LOT-2024-002',
-                'school_id' => $schools->random()->id,
-                'shipping_address_1' => '456 Oak Avenue',
-                'shipping_city' => 'Stanford',
-                'shipping_state' => 'CA',
-                'shipping_zip' => '94305',
-                'notes' => 'Contains fragile items',
-            ],
-            [
-                'pallet_number' => 'PAL-003',
-                'status' => 'delivered',
-                'location' => 'Warehouse C',
-                'lot' => 'LOT-2024-003',
-                'school_id' => $schools->random()->id,
-                'shipping_address_1' => '789 Pine Street',
-                'shipping_city' => 'Los Angeles',
-                'shipping_state' => 'CA',
-                'shipping_zip' => '90095',
-                'notes' => 'Successfully delivered to campus',
-            ],
-            [
-                'pallet_number' => 'PAL-004',
-                'status' => 'packing',
-                'location' => 'Warehouse A',
-                'lot' => 'LOT-2024-004',
-                'school_id' => $schools->random()->id,
-                'shipping_address_1' => '321 Elm Drive',
-                'shipping_city' => 'Pasadena',
-                'shipping_state' => 'CA',
-                'shipping_zip' => '91125',
-                'notes' => 'Standard processing',
-            ],
-            [
-                'pallet_number' => 'PAL-005',
-                'status' => 'shipped',
-                'location' => 'Warehouse B',
-                'lot' => 'LOT-2024-005',
-                'school_id' => $schools->random()->id,
-                'shipping_address_1' => '654 Maple Lane',
-                'shipping_city' => 'San Diego',
-                'shipping_state' => 'CA',
-                'shipping_zip' => '92093',
-                'notes' => 'In transit to destination',
-            ],
-            [
-                'pallet_number' => 'PAL-006',
-                'status' => 'packing',
-                'location' => 'Warehouse C',
-                'lot' => 'LOT-2024-006',
-                'school_id' => $schools->random()->id,
-                'shipping_address_1' => '987 Cedar Road',
-                'shipping_city' => 'Davis',
-                'shipping_state' => 'CA',
-                'shipping_zip' => '95616',
-                'notes' => 'New pallet being prepared',
-            ],
-        ];
+                'shipping_address_1' => rand(100, 9999) . ' ' . $this->getRandomStreetName(),
+                'shipping_city' => $city,
+                'shipping_state' => $state,
+                'shipping_zip' => $zip,
+                'notes' => rand(1, 3) === 1 ? $this->getRandomPalletNote() : null,
+            ];
+            
+            $pallets[] = $pallet;
+        }
 
         foreach ($pallets as $palletData) {
             $pallet = Pallet::create(array_merge($palletData, [
                 'created_by' => $user->id,
             ]));
         }
+    }
+
+    private function getRandomStreetName()
+    {
+        $streets = ['Main St', 'Oak Ave', 'Pine St', 'Elm Dr', 'Maple Ln', 'Cedar Rd', 'Birch St', 'Spruce Ave', 'First St', 'Second Ave', 'Park Rd', 'University Blvd', 'College St', 'Campus Dr'];
+        return $streets[array_rand($streets)];
+    }
+
+    private function getRandomPalletNote()
+    {
+        $notes = [
+            'Priority pallet for rush orders',
+            'Contains fragile items',
+            'Successfully delivered to campus',
+            'Standard processing',
+            'In transit to destination',
+            'New pallet being prepared',
+            'Special handling required',
+            'Heavy items - use forklift',
+            'Temperature controlled storage',
+            'Customer requested expedited delivery'
+        ];
+        return $notes[array_rand($notes)];
     }
 }

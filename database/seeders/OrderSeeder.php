@@ -31,123 +31,51 @@ class OrderSeeder extends Seeder
             $user = $users->first();
         }
 
-        $orders = [
-            [
-                'order_number' => 'ORD-2024-001',
-                'customer_name' => 'John Smith',
-                'customer_email' => 'john.smith@email.com',
-                'school_id' => $schools->random()->id,
-                'status' => 'pending',
-                'shipping_address_1' => '123 Main Street',
-                'shipping_city' => 'Berkeley',
-                'shipping_state' => 'CA',
-                'shipping_zip' => '94720',
-                'notes' => 'Rush order - needs to be processed quickly',
-                'verified' => false,
-            ],
-            [
-                'order_number' => 'ORD-2024-002',
-                'customer_name' => 'Sarah Johnson',
-                'customer_email' => 'sarah.johnson@email.com',
-                'school_id' => $schools->random()->id,
-                'status' => 'picked',
-                'shipping_address_1' => '456 Oak Avenue',
-                'shipping_city' => 'Stanford',
-                'shipping_state' => 'CA',
-                'shipping_zip' => '94305',
-                'tracking_number' => 'TRK123456789',
-                'verified' => true,
-                'verified_at' => now(),
-                'verified_by' => $user->id,
-            ],
-            [
-                'order_number' => 'ORD-2024-003',
-                'customer_name' => 'Michael Brown',
-                'customer_email' => 'michael.brown@email.com',
-                'school_id' => $schools->random()->id,
-                'status' => 'packed',
-                'shipping_address_1' => '789 Pine Street',
-                'shipping_city' => 'Los Angeles',
-                'shipping_state' => 'CA',
-                'shipping_zip' => '90095',
-                'pallet_number' => 'PAL-001',
-                'verified' => true,
-                'verified_at' => now()->subHours(2),
-                'verified_by' => $user->id,
-            ],
-            [
-                'order_number' => 'ORD-2024-004',
-                'customer_name' => 'Emily Davis',
-                'customer_email' => 'emily.davis@email.com',
-                'school_id' => $schools->random()->id,
-                'status' => 'shipped',
-                'shipping_address_1' => '321 Elm Drive',
-                'shipping_city' => 'Pasadena',
-                'shipping_state' => 'CA',
-                'shipping_zip' => '91125',
-                'tracking_number' => 'TRK987654321',
-                'pallet_number' => 'PAL-002',
-                'verified' => true,
-                'verified_at' => now()->subDays(1),
-                'verified_by' => $user->id,
-            ],
-            [
-                'order_number' => 'ORD-2024-005',
-                'customer_name' => 'David Wilson',
-                'customer_email' => 'david.wilson@email.com',
-                'school_id' => null, // No school assigned
-                'status' => 'delivered',
-                'shipping_address_1' => '654 Maple Lane',
-                'shipping_city' => 'San Diego',
-                'shipping_state' => 'CA',
-                'shipping_zip' => '92093',
-                'tracking_number' => 'TRK456789123',
-                'pallet_number' => 'PAL-003',
-                'verified' => true,
-                'verified_at' => now()->subDays(3),
-                'verified_by' => $user->id,
-            ],
-            [
-                'order_number' => 'ORD-2024-006',
-                'customer_name' => 'Lisa Anderson',
-                'customer_email' => 'lisa.anderson@email.com',
-                'school_id' => $schools->random()->id,
-                'status' => 'pending',
-                'shipping_address_1' => '987 Cedar Road',
-                'shipping_city' => 'Davis',
-                'shipping_state' => 'CA',
-                'shipping_zip' => '95616',
-                'notes' => 'Fragile items - handle with care',
-                'verified' => false,
-            ],
-            [
-                'order_number' => 'ORD-2024-007',
-                'customer_name' => 'Robert Taylor',
-                'customer_email' => 'robert.taylor@email.com',
-                'school_id' => $schools->random()->id,
-                'status' => 'picked',
-                'shipping_address_1' => '147 Birch Street',
-                'shipping_city' => 'Irvine',
-                'shipping_state' => 'CA',
-                'shipping_zip' => '92697',
-                'verified' => false,
-            ],
-            [
-                'order_number' => 'ORD-2024-008',
-                'customer_name' => 'Jennifer Martinez',
-                'customer_email' => 'jennifer.martinez@email.com',
-                'school_id' => $schools->random()->id,
-                'status' => 'packed',
-                'shipping_address_1' => '258 Spruce Avenue',
-                'shipping_city' => 'Berkeley',
-                'shipping_state' => 'CA',
-                'shipping_zip' => '94720',
-                'pallet_number' => 'PAL-004',
-                'verified' => true,
-                'verified_at' => now()->subHours(4),
-                'verified_by' => $user->id,
-            ],
-        ];
+        // Generate 100 orders
+        $orders = [];
+        $statuses = ['pending', 'picked', 'packed', 'shipped', 'delivered'];
+        $cities = ['Berkeley', 'Stanford', 'Los Angeles', 'Pasadena', 'San Diego', 'Davis', 'Irvine', 'San Francisco', 'Oakland', 'Fresno'];
+        $states = ['CA', 'NY', 'TX', 'FL', 'IL', 'PA', 'OH', 'GA', 'NC', 'MI'];
+        
+        for ($i = 1; $i <= 100; $i++) {
+            $orderNumber = 'ORD-2024-' . str_pad($i, 3, '0', STR_PAD_LEFT);
+            $status = $statuses[array_rand($statuses)];
+            $city = $cities[array_rand($cities)];
+            $state = $states[array_rand($states)];
+            $zip = rand(10000, 99999);
+            
+            $order = [
+                'order_number' => $orderNumber,
+                'customer_name' => $this->getRandomName(),
+                'customer_email' => $this->getRandomEmail(),
+                'school_id' => rand(1, 10) <= 8 ? $schools->random()->id : null, // 80% have schools
+                'status' => $status,
+                'shipping_address_1' => rand(100, 9999) . ' ' . $this->getRandomStreetName(),
+                'shipping_city' => $city,
+                'shipping_state' => $state,
+                'shipping_zip' => $zip,
+                'notes' => rand(1, 3) === 1 ? $this->getRandomNote() : null,
+                'verified' => rand(1, 3) === 1, // 33% verified
+            ];
+            
+            // Add tracking number for shipped/delivered orders
+            if (in_array($status, ['shipped', 'delivered'])) {
+                $order['tracking_number'] = 'TRK' . rand(100000000, 999999999);
+            }
+            
+            // Add pallet number for packed/shipped/delivered orders
+            if (in_array($status, ['packed', 'shipped', 'delivered'])) {
+                $order['pallet_number'] = 'PAL-' . str_pad(rand(1, 50), 3, '0', STR_PAD_LEFT);
+            }
+            
+            // Add verification details for verified orders
+            if ($order['verified']) {
+                $order['verified_at'] = now()->subDays(rand(0, 30))->subHours(rand(0, 23));
+                $order['verified_by'] = $user->id;
+            }
+            
+            $orders[] = $order;
+        }
 
         foreach ($orders as $orderData) {
             $order = Order::create($orderData);
@@ -207,5 +135,41 @@ class OrderSeeder extends Seeder
             'Comfortable and ergonomic design'
         ];
         return $descriptions[array_rand($descriptions)];
+    }
+
+    private function getRandomName()
+    {
+        $firstNames = ['John', 'Jane', 'Michael', 'Sarah', 'David', 'Emily', 'Robert', 'Lisa', 'James', 'Jennifer', 'William', 'Ashley', 'Richard', 'Jessica', 'Charles', 'Amanda', 'Thomas', 'Melissa', 'Christopher', 'Deborah'];
+        $lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez', 'Hernandez', 'Lopez', 'Gonzalez', 'Wilson', 'Anderson', 'Thomas', 'Taylor', 'Moore', 'Jackson', 'Martin'];
+        
+        return $firstNames[array_rand($firstNames)] . ' ' . $lastNames[array_rand($lastNames)];
+    }
+
+    private function getRandomEmail()
+    {
+        $domains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'email.com', 'student.edu'];
+        $name = strtolower(str_replace(' ', '.', $this->getRandomName()));
+        return $name . '@' . $domains[array_rand($domains)];
+    }
+
+    private function getRandomStreetName()
+    {
+        $streets = ['Main St', 'Oak Ave', 'Pine St', 'Elm Dr', 'Maple Ln', 'Cedar Rd', 'Birch St', 'Spruce Ave', 'First St', 'Second Ave', 'Park Rd', 'University Blvd', 'College St', 'Campus Dr'];
+        return $streets[array_rand($streets)];
+    }
+
+    private function getRandomNote()
+    {
+        $notes = [
+            'Rush order - needs to be processed quickly',
+            'Fragile items - handle with care',
+            'Priority shipping requested',
+            'Special handling required',
+            'Customer requested expedited processing',
+            'Contains electronics - handle carefully',
+            'Large order - may require special packaging',
+            'Customer notes: Please call before delivery'
+        ];
+        return $notes[array_rand($notes)];
     }
 }

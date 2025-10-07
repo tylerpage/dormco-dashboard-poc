@@ -14,6 +14,7 @@ use App\Http\Controllers\ExportController;
 Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
 // Dashboard Routes
 Route::middleware(['auth'])->group(function () {

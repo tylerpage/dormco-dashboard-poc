@@ -179,7 +179,9 @@
                     </div>
 
                     <!-- Pagination -->
-                    {{ $orders->links() }}
+                    <div class="d-flex justify-content-center">
+                        {{ $orders->links('pagination::bootstrap-4') }}
+                    </div>
                 </div>
             </div>
         </div>

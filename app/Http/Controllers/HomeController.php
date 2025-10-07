@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Order;
+use App\Models\Pallet;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -23,6 +26,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $user = Auth::user();
+        $data = [];
+
+        // For admin and staff users, show order statistics
+        if (in_array($user->role, ['admin', 'staff'])) {
+            $data['totalOrders'] = Order::count();
+            $data['unverifiedOrders'] = Order::where('verified', false)->count();
+        }
+
+        return view('home', $data);
     }
 }

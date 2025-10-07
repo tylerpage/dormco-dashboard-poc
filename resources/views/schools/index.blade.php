@@ -91,7 +91,9 @@
                     </div>
 
                     <!-- Pagination -->
-                    {{ $schools->links() }}
+                    <div class="d-flex justify-content-center">
+                        {{ $schools->links('pagination::bootstrap-4') }}
+                    </div>
                 </div>
             </div>
         </div>

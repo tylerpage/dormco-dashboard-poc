@@ -138,7 +138,9 @@
                     </div>
 
                     <!-- Pagination -->
-                    {{ $pallets->links() }}
+                    <div class="d-flex justify-content-center">
+                        {{ $pallets->links('pagination::bootstrap-4') }}
+                    </div>
                 </div>
             </div>
         </div>
