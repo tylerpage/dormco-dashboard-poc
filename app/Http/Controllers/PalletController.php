@@ -250,33 +250,55 @@ class PalletController extends Controller
     public function uploadPhoto(Request $request, Pallet $pallet)
     {
         $request->validate([
-            'photo' => 'required|image|max:10240', // 10MB max
+            'photos' => 'required|array|min:1',
+            'photos.*' => 'image|max:10240', // 10MB max per photo
             'notes' => 'nullable|string|max:1000',
         ]);
 
-        // Generate unique filename with random string
-        $photo = $request->file('photo');
-        $originalName = $photo->getClientOriginalName();
-        $extension = $photo->getClientOriginalExtension();
-        $randomString = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 10);
-        $filename = pathinfo($originalName, PATHINFO_FILENAME) . '_' . $randomString . '.' . $extension;
-        
-        $path = $photo->storeAs('pallet-photos', $filename, 'public');
+        $uploadedPhotos = [];
+        $errors = [];
 
-        $pallet->photos()->create([
-            'photo_path' => $path,
-            'notes' => $request->notes,
-            'uploaded_by' => Auth::id(),
-        ]);
+        foreach ($request->file('photos') as $photo) {
+            try {
+                // Generate unique filename with random string
+                $originalName = $photo->getClientOriginalName();
+                $extension = $photo->getClientOriginalExtension();
+                $randomString = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 10);
+                $filename = pathinfo($originalName, PATHINFO_FILENAME) . '_' . $randomString . '.' . $extension;
+                
+                $path = $photo->storeAs('pallet-photos', $filename, 'public');
+
+                $pallet->photos()->create([
+                    'photo_path' => $path,
+                    'notes' => $request->notes,
+                    'uploaded_by' => Auth::id(),
+                ]);
+
+                $uploadedPhotos[] = $filename;
+            } catch (\Exception $e) {
+                $errors[] = "Failed to upload {$photo->getClientOriginalName()}: " . $e->getMessage();
+            }
+        }
 
         // Log the photo upload action
-        $pallet->actions()->create([
-            'action_type' => 'photo_uploaded',
-            'description' => "Photo uploaded: {$filename}",
-            'performed_by' => Auth::id(),
-        ]);
+        if (!empty($uploadedPhotos)) {
+            $pallet->actions()->create([
+                'action_type' => 'photos_uploaded',
+                'description' => "Photos uploaded: " . implode(', ', $uploadedPhotos),
+                'performed_by' => Auth::id(),
+            ]);
+        }
 
-        return redirect()->route('pallets.show', $pallet)->with('success', 'Photo uploaded successfully.');
+        if (!empty($errors)) {
+            $message = count($uploadedPhotos) . ' photos uploaded successfully. Errors: ' . implode('; ', $errors);
+            return redirect()->route('pallets.show', $pallet)->with('warning', $message);
+        }
+
+        $message = count($uploadedPhotos) > 1 ? 
+            count($uploadedPhotos) . ' photos uploaded successfully.' : 
+            'Photo uploaded successfully.';
+
+        return redirect()->route('pallets.show', $pallet)->with('success', $message);
     }
 
     /**

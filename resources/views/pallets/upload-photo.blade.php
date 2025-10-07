@@ -30,11 +30,14 @@
                     <form action="{{ route('pallets.upload-photo.store', $pallet) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
-                            <label for="photo" class="form-label">Select Photo <span class="text-danger">*</span></label>
-                            <input type="file" class="form-control @error('photo') is-invalid @enderror" 
-                                   id="photo" name="photo" accept="image/*" required>
-                            <div class="form-text">Maximum 10MB per file.</div>
-                            @error('photo')
+                            <label for="photos" class="form-label">Select Photos <span class="text-danger">*</span></label>
+                            <input type="file" class="form-control @error('photos') is-invalid @enderror @error('photos.*') is-invalid @enderror" 
+                                   id="photos" name="photos[]" accept="image/*" multiple required>
+                            <div class="form-text">You can select multiple photos at once. Maximum 10MB per photo.</div>
+                            @error('photos')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            @error('photos.*')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -50,7 +53,7 @@
                         </div>
 
                         <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary">Upload Photo</button>
+                            <button type="submit" class="btn btn-primary">Upload Photos</button>
                             <a href="{{ route('pallets.show', $pallet) }}" class="btn btn-secondary">Cancel</a>
                         </div>
                     </form>
