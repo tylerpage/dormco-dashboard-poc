@@ -94,9 +94,9 @@
                     <div class="card mb-4">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">Pallet Photos ({{ $pallet->photos->count() }})</h5>
-                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#uploadPhotoModal">
+                            <a href="{{ route('pallets.upload-photo', $pallet) }}" class="btn btn-sm btn-outline-primary">
                                 Upload Photo
-                            </button>
+                            </a>
                         </div>
                         <div class="card-body">
                             @forelse($pallet->photos as $photo)
@@ -300,36 +300,6 @@
     </div>
 </div>
 
-<!-- Upload Photo Modal -->
-<div class="modal fade" id="uploadPhotoModal" tabindex="-1" aria-labelledby="uploadPhotoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <form action="{{ route('pallets.upload-photo', $pallet) }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title">Upload Pallet Photo</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="photo" class="form-label">Photo</label>
-                        <input type="file" class="form-control" id="photo" name="photo" accept="image/*" required>
-                        <div class="form-text">Maximum file size: 10MB</div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="notes" class="form-label">Notes</label>
-                        <textarea class="form-control" id="notes" name="notes" rows="3" 
-                                  placeholder="Optional notes about this photo"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Upload Photo</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 <script>
 function deletePhoto(photoId, photoPath) {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Pallet;
 use App\Models\School;
 use App\Models\SavedView;
 use Illuminate\Http\Request;
@@ -346,7 +347,7 @@ class OrderController extends Controller
             'performed_by' => Auth::id(),
         ]);
 
-        return redirect()->back()->with('success', 'Shipping information updated successfully.');
+        return redirect()->route('orders.show', $order)->with('success', 'Shipping information updated successfully.');
     }
 
     /**
@@ -420,6 +421,14 @@ class OrderController extends Controller
     }
 
     /**
+     * Show upload photos form
+     */
+    public function showUploadPhotos(Order $order)
+    {
+        return view('orders.upload-photos', compact('order'));
+    }
+
+    /**
      * Upload photos for an order
      */
     public function uploadPhotos(Request $request, Order $order)
@@ -467,7 +476,7 @@ class OrderController extends Controller
             $message .= " Errors: " . implode(', ', $errors);
         }
 
-        return redirect()->back()->with('success', $message);
+        return redirect()->route('orders.show', $order)->with('success', $message);
     }
 
     /**

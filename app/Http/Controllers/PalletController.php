@@ -237,6 +237,14 @@ class PalletController extends Controller
     }
 
     /**
+     * Show upload photo form
+     */
+    public function showUploadPhoto(Pallet $pallet)
+    {
+        return view('pallets.upload-photo', compact('pallet'));
+    }
+
+    /**
      * Upload photo to pallet
      */
     public function uploadPhoto(Request $request, Pallet $pallet)
@@ -268,7 +276,7 @@ class PalletController extends Controller
             'performed_by' => Auth::id(),
         ]);
 
-        return redirect()->back()->with('success', 'Photo uploaded successfully.');
+        return redirect()->route('pallets.show', $pallet)->with('success', 'Photo uploaded successfully.');
     }
 
     /**

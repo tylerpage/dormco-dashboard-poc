@@ -4,6 +4,20 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <h2>Order #{{ $order->order_number }}</h2>
@@ -128,9 +142,9 @@
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">Order Photos ({{ $order->photos->count() }})</h5>
                             @if(auth()->user()->role !== 'school')
-                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#uploadPhotosModal">
+                            <a href="{{ route('orders.upload-photos', $order) }}" class="btn btn-sm btn-outline-primary">
                                 Upload Photos
-                            </button>
+                            </a>
                             @endif
                         </div>
                         <div class="card-body">
@@ -312,36 +326,6 @@
 </div>
 
 
-<!-- Upload Photos Modal -->
-<div class="modal fade" id="uploadPhotosModal" tabindex="-1" aria-labelledby="uploadPhotosModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-        <div class="modal-content">
-            <form action="{{ route('orders.upload-photos', $order) }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title">Upload Photos for Order #{{ $order->order_number }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="photos" class="form-label">Select Photos <span class="text-danger">*</span></label>
-                        <input type="file" class="form-control" id="photos" name="photos[]" multiple accept="image/*" required>
-                        <div class="form-text">You can select multiple photos at once. Maximum file size: 10MB per photo.</div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="notes" class="form-label">Notes (Optional)</label>
-                        <textarea class="form-control" id="notes" name="notes" rows="3" 
-                                  placeholder="Add notes about these photos..."></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Upload Photos</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 <script>
 function deletePhoto(photoId, photoPath) {
