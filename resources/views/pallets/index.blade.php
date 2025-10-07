@@ -8,12 +8,12 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h3 class="mb-0">Pallets</h3>
                     <div class="d-flex gap-2">
-                        <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#qrScannerModal">
+                        <a href="{{ route('pallets.qr-scanner') }}" class="btn btn-outline-success">
                             <i class="fas fa-qrcode"></i> Scan QR Code
-                        </button>
-                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#importModal">
+                        </a>
+                        <a href="{{ route('pallets.import') }}" class="btn btn-outline-primary">
                             Import Pallets
-                        </button>
+                        </a>
                         <a href="{{ route('pallets.create') }}" class="btn btn-primary">Add Pallet</a>
                     </div>
                 </div>
@@ -145,93 +145,7 @@
     </div>
 </div>
 
-<!-- Import Modal -->
-<div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-        <div class="modal-content">
-            <form action="{{ route('pallets.import') }}" method="POST">
-                @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title">Import Pallet Numbers</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="pallet_numbers" class="form-label">Pallet Numbers (one per line)</label>
-                        <textarea class="form-control" id="pallet_numbers" name="pallet_numbers" rows="8" required 
-                                  placeholder="PALLET001&#10;PALLET002&#10;PALLET003"></textarea>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="school_id" class="form-label">School</label>
-                                <select class="form-select" id="school_id" name="school_id">
-                                    <option value="">No School</option>
-                                    @foreach($schools as $school)
-                                        <option value="{{ $school->id }}">{{ $school->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="location" class="form-label">Location</label>
-                                <input type="text" class="form-control" id="location" name="location" 
-                                       placeholder="Warehouse A">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="lot" class="form-label">Lot</label>
-                                <input type="text" class="form-control" id="lot" name="lot" 
-                                       placeholder="LOT001">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="shipping_address" class="form-label">Shipping Address</label>
-                                <textarea class="form-control" id="shipping_address" name="shipping_address" rows="2" 
-                                          placeholder="Default shipping address"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Import Pallets</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
-<!-- QR Scanner Modal -->
-<div class="modal fade" id="qrScannerModal" tabindex="-1" aria-labelledby="qrScannerModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-sm-down">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Scan QR Code</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="text-center">
-                    <div id="qr-reader" style="width: 100%; max-width: 100%; margin: 0 auto; min-height: 300px;"></div>
-                    <div id="qr-reader-results" class="mt-3" style="display: none;">
-                        <div class="alert alert-info">
-                            <strong>QR Code Detected:</strong>
-                            <div id="qr-result"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection
 
 @push('scripts')

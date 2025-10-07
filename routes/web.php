@@ -18,10 +18,12 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 // Dashboard Routes
 Route::middleware(['auth'])->group(function () {
     // Orders - Available to all authenticated users, but with restrictions in controller
-    Route::post('orders/save-view', [OrderController::class, 'saveView'])->name('orders.save-view');
+    Route::get('orders/save-view', [OrderController::class, 'showSaveView'])->name('orders.save-view');
+    Route::post('orders/save-view', [OrderController::class, 'saveView'])->name('orders.save-view.store');
     Route::get('orders/load-view/{view}', [OrderController::class, 'loadView'])->name('orders.load-view');
     Route::delete('orders/delete-view/{view}', [OrderController::class, 'deleteView'])->name('orders.delete-view');
-    Route::post('orders/{order}/update-shipping', [OrderController::class, 'updateShipping'])->name('orders.update-shipping');
+    Route::get('orders/{order}/update-shipping', [OrderController::class, 'showUpdateShipping'])->name('orders.update-shipping');
+    Route::post('orders/{order}/update-shipping', [OrderController::class, 'updateShipping'])->name('orders.update-shipping.store');
     Route::post('orders/{order}/upload-photos', [OrderController::class, 'uploadPhotos'])->name('orders.upload-photos');
     Route::delete('order-photos/{photo}', [OrderController::class, 'deletePhoto'])->name('order-photos.delete');
     Route::post('orders/{order}/toggle-verification', [OrderController::class, 'toggleVerification'])->name('orders.toggle-verification');
@@ -31,7 +33,9 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['permission:pallets'])->group(function () {
         Route::resource('pallets', PalletController::class);
         Route::get('pallets/{pallet}/orders', [PalletController::class, 'orders'])->name('pallets.orders');
-        Route::post('pallets/import', [PalletController::class, 'import'])->name('pallets.import');
+        Route::get('pallets/qr-scanner', [PalletController::class, 'qrScanner'])->name('pallets.qr-scanner');
+        Route::get('pallets/import', [PalletController::class, 'showImport'])->name('pallets.import');
+        Route::post('pallets/import', [PalletController::class, 'import'])->name('pallets.import.store');
         Route::post('pallets/{pallet}/upload-photo', [PalletController::class, 'uploadPhoto'])->name('pallets.upload-photo');
         Route::delete('pallet-photos/{photo}', [PalletController::class, 'deletePhoto'])->name('pallet-photos.delete');
         Route::post('pallets/{pallet}/verify-order/{order}', [PalletController::class, 'verifyOrder'])->name('pallets.verify-order');

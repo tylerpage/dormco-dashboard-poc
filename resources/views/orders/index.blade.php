@@ -8,9 +8,9 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h3 class="mb-0">Orders</h3>
                     <div class="d-flex gap-2">
-                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#saveViewModal">
+                        <a href="{{ route('orders.save-view', request()->all()) }}" class="btn btn-outline-primary">
                             Save Current View
-                        </button>
+                        </a>
                         <!-- <a href="{{ route('orders.create') }}" class="btn btn-primary">Add Order</a> -->
                     </div>
                 </div>
@@ -181,32 +181,6 @@
     </div>
 </div>
 
-<!-- Save View Modal -->
-<div class="modal fade" id="saveViewModal" tabindex="-1" aria-labelledby="saveViewModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <form action="{{ route('orders.save-view') }}" method="POST">
-                @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title">Save Personal View</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="viewName" class="form-label">View Name</label>
-                        <input type="text" class="form-control" id="viewName" name="name" required>
-                        <div class="form-text">This view will be saved to your personal collection and only visible to you.</div>
-                    </div>
-                    <input type="hidden" name="filters" value="{{ json_encode(request()->all()) }}">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save View</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 <script>
 function deleteView(viewId, viewName) {

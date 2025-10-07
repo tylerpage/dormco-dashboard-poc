@@ -301,6 +301,22 @@ class PalletController extends Controller
     }
 
     /**
+     * Show QR Scanner page
+     */
+    public function qrScanner()
+    {
+        return view('pallets.qr-scanner');
+    }
+
+    /**
+     * Show Import Pallets page
+     */
+    public function showImport()
+    {
+        return view('pallets.import');
+    }
+
+    /**
      * Verify an order is on a pallet
      */
     public function verifyOrder(Request $request, Pallet $pallet, Order $order)

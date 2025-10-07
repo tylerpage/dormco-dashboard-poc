@@ -291,6 +291,15 @@ class OrderController extends Controller
     }
 
     /**
+     * Show update shipping form
+     */
+    public function showUpdateShipping(Order $order)
+    {
+        $pallets = Pallet::all();
+        return view('orders.update-shipping', compact('order', 'pallets'));
+    }
+
+    /**
      * Update shipping information
      */
     public function updateShipping(Request $request, Order $order)
@@ -338,6 +347,16 @@ class OrderController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Shipping information updated successfully.');
+    }
+
+    /**
+     * Show the save view form
+     */
+    public function showSaveView(Request $request)
+    {
+        return view('orders.save-view', [
+            'filters' => $request->all()
+        ]);
     }
 
     /**

@@ -94,9 +94,9 @@
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">Shipping Address</h5>
                             @if(auth()->user()->role !== 'school')
-                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#updateShippingModal">
+                            <a href="{{ route('orders.update-shipping', $order) }}" class="btn btn-sm btn-outline-primary">
                                 Update Shipping
-                            </button>
+                            </a>
                             @endif
                         </div>
                         <div class="card-body">
@@ -311,91 +311,6 @@
     </div>
 </div>
 
-<!-- Update Shipping Modal -->
-<div class="modal fade" id="updateShippingModal" tabindex="-1" aria-labelledby="updateShippingModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-sm-down modal-lg">
-        <div class="modal-content">
-            <form action="{{ route('orders.update-shipping', $order) }}" method="POST">
-                @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title">Update Shipping Information</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="tracking_number" class="form-label">Tracking Number</label>
-                        <input type="text" class="form-control" id="tracking_number" name="tracking_number" 
-                               value="{{ $order->tracking_number }}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="pallet_number" class="form-label">Pallet Number</label>
-                        <select class="form-select" id="pallet_number" name="pallet_number">
-                            <option value="">No Pallet Assigned</option>
-                            @foreach($pallets as $pallet)
-                                <option value="{{ $pallet->pallet_number }}" {{ $order->pallet_number == $pallet->pallet_number ? 'selected' : '' }}>
-                                    {{ $pallet->pallet_number }} 
-                                    @if($pallet->school)
-                                        - {{ $pallet->school->name }}
-                                    @endif
-                                    ({{ ucfirst($pallet->status) }})
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Shipping Address</label>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <label for="shipping_address_1" class="form-label">Address Line 1 <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="shipping_address_1" name="shipping_address_1" 
-                                       value="{{ $order->shipping_address_1 }}" required>
-                            </div>
-                        </div>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <label for="shipping_address_2" class="form-label">Address Line 2</label>
-                                <input type="text" class="form-control" id="shipping_address_2" name="shipping_address_2" 
-                                       value="{{ $order->shipping_address_2 }}">
-                            </div>
-                        </div>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <label for="shipping_address_3" class="form-label">Address Line 3</label>
-                                <input type="text" class="form-control" id="shipping_address_3" name="shipping_address_3" 
-                                       value="{{ $order->shipping_address_3 }}">
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-4 col-12 mb-3">
-                                <label for="shipping_city" class="form-label">City <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="shipping_city" name="shipping_city" 
-                                       value="{{ $order->shipping_city }}" required>
-                            </div>
-                            <div class="col-md-4 col-12 mb-3">
-                                <label for="shipping_state" class="form-label">State <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="shipping_state" name="shipping_state" 
-                                       value="{{ $order->shipping_state }}" required>
-                            </div>
-                            <div class="col-md-4 col-12 mb-3">
-                                <label for="shipping_zip" class="form-label">ZIP Code <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="shipping_zip" name="shipping_zip" 
-                                       value="{{ $order->shipping_zip }}" required>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Update Shipping</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 <!-- Upload Photos Modal -->
 <div class="modal fade" id="uploadPhotosModal" tabindex="-1" aria-labelledby="uploadPhotosModalLabel" aria-hidden="true">
