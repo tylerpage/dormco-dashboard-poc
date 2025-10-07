@@ -67,11 +67,11 @@
         }
         
         // Show install instructions if not already installed
-        function showInstallInstructions() {
-            if (isAppInstalled()) return;
-            
-            // Check if user has dismissed the instructions before
-            if (localStorage.getItem('pwa-install-dismissed') === 'true') return;
+        function showInstallInstructions(forceShow = false) {
+            if (!forceShow) {
+                if (isAppInstalled()) return;
+                if (localStorage.getItem('pwa-install-dismissed') === 'true') return;
+            }
             
             // Create the popup
             const popup = document.createElement('div');
@@ -285,7 +285,7 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#" onclick="showInstallInstructions(); return false;">
+                                    <a class="dropdown-item" href="#" onclick="showInstallInstructions(true); return false;">
                                         <i class="fas fa-mobile-alt"></i> Add to Home Screen
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"

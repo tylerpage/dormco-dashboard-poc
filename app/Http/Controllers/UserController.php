@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\School;
+use App\Notifications\NewUserNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -64,7 +65,10 @@ class UserController extends Controller
             'permissions' => $request->permissions,
         ]);
 
-        return redirect()->route('users.index')->with('success', 'User created successfully.');
+        // Send welcome email with password reset instructions
+        $user->notify(new NewUserNotification());
+
+        return redirect()->route('users.index')->with('success', 'User created successfully. A welcome email with password setup instructions has been sent to ' . $user->email . '.');
     }
 
     /**
