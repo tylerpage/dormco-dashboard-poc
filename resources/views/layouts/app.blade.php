@@ -68,6 +68,14 @@
         
         // Show install instructions if not already installed
         function showInstallInstructions(forceShow = false) {
+            // Don't show on authentication pages
+            if (window.location.pathname.includes('/login') || 
+                window.location.pathname.includes('/register') || 
+                window.location.pathname.includes('/password/reset') ||
+                window.location.pathname.includes('/email/verify')) {
+                return;
+            }
+            
             if (!forceShow) {
                 if (isAppInstalled()) return;
                 if (localStorage.getItem('pwa-install-dismissed') === 'true') return;
