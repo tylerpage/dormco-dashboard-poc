@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@php
+use Illuminate\Support\Facades\Storage;
+@endphp
+
 @section('content')
 <div class="container-fluid">
     <div class="row">
@@ -151,7 +155,7 @@
                             @forelse($order->photos as $photo)
                             <div class="row border-bottom py-3">
                                 <div class="col-md-3">
-                                    <img src="{{ asset('storage/' . $photo->photo_path) }}" alt="Order Photo" 
+                                    <img src="{{ Storage::url($photo->photo_path) }}" alt="Order Photo" 
                                          class="img-thumbnail" style="max-width: 150px; max-height: 150px; cursor: pointer;"
                                          data-bs-toggle="modal" data-bs-target="#imageModal{{ $photo->id }}">
                                 </div>
@@ -186,7 +190,7 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <div class="modal-body text-center">
-                                            <img src="{{ asset('storage/' . $photo->photo_path) }}" 
+                                            <img src="{{ Storage::url($photo->photo_path) }}" 
                                                  alt="Order Photo" class="img-fluid" style="max-height: 70vh;">
                                             <div class="mt-3">
                                                 <strong>Uploaded by:</strong> {{ $photo->uploadedBy->name }}<br>
@@ -231,7 +235,7 @@
                                 </div>
                                 <div class="col-md-4 text-end">
                                     @if($item->photo_path)
-                                        <img src="{{ asset('storage/' . $item->photo_path) }}" alt="{{ $item->item_name }}" 
+                                        <img src="{{ Storage::url($item->photo_path) }}" alt="{{ $item->item_name }}" 
                                              class="img-thumbnail" style="max-width: 100px; max-height: 100px;">
                                     @else
                                         <span class="text-muted">No photo</span>
