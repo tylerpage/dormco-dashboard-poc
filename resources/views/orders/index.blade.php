@@ -110,8 +110,7 @@
                             <thead>
                                 <tr>
                                     <th>Order #</th>
-                                    <th>Customer</th>
-                                    <th>Email</th>
+                                    <th>Customer & Email</th>
                                     <th>School</th>
                                     <th>Items</th>
                                     <th>Status</th>
@@ -123,13 +122,19 @@
                             <tbody>
                                 @forelse($orders as $order)
                                 <tr>
-                                    <td>
+                                    <td style="white-space: nowrap;">
                                         <a href="{{ route('orders.show', $order) }}" class="text-decoration-none">
                                             {{ $order->order_number }}
                                         </a>
                                     </td>
-                                    <td>{{ $order->customer_name }}</td>
-                                    <td>{{ $order->customer_email }}</td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span class="fw-bold">{{ $order->customer_name }}</span>
+                                            <a href="mailto:{{ $order->customer_email }}" class="text-decoration-none text-muted small">
+                                                {{ $order->customer_email }}
+                                            </a>
+                                        </div>
+                                    </td>
                                     <td>
                                         @if($order->school)
                                             <span class="badge bg-info">{{ $order->school->name }}</span>
@@ -166,7 +171,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="9" class="text-center py-4">No orders found.</td>
+                                    <td colspan="8" class="text-center py-4">No orders found.</td>
                                 </tr>
                                 @endforelse
                             </tbody>
