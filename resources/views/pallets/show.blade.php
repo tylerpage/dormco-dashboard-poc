@@ -4,22 +4,22 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
+                <div class="mb-3 mb-md-0 flex-grow-1">
                     <h2>Pallet #{{ $pallet->pallet_number }}</h2>
                     <p class="text-muted mb-0">
                         Created by {{ $pallet->creator->name }} on {{ $pallet->created_at->format('M j, Y g:i A') }}
                     </p>
                 </div>
-                <div>
-                    <a href="{{ route('pallets.orders', $pallet) }}" class="btn btn-outline-info">
+                <div class="d-flex flex-column flex-md-row gap-2">
+                    <a href="{{ route('pallets.orders', $pallet) }}" class="btn btn-outline-info w-md-auto">
                         <i class="fas fa-list"></i> View Orders
                     </a>
-                    <button class="btn btn-outline-success" onclick="printQRCode('{{ $pallet->pallet_number }}')">
+                    <button class="btn btn-outline-success w-md-auto" onclick="printQRCode('{{ $pallet->pallet_number }}')">
                         <i class="fas fa-qrcode"></i> Print QR Code
                     </button>
-                    <a href="{{ route('pallets.index') }}" class="btn btn-outline-secondary">Back to Pallets</a>
-                    <a href="{{ route('pallets.edit', $pallet) }}" class="btn btn-primary">Edit Pallet</a>
+                    <a href="{{ route('pallets.index') }}" class="btn btn-outline-secondary w-md-auto">Back to Pallets</a>
+                    <a href="{{ route('pallets.edit', $pallet) }}" class="btn btn-primary w-md-auto">Edit Pallet</a>
                 </div>
             </div>
 

@@ -25,11 +25,11 @@
     <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('android-chrome-512x512.png') }}">
     
     <!-- PWA Meta Tags -->
-    <meta name="application-name" content="Dormco Dashboard">
+    <meta name="application-name" content="DormCo Mgmt">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Dormco Dashboard">
-    <meta name="description" content="Dormco Admin Dashboard for managing orders, pallets, and schools">
+    <meta name="apple-mobile-web-app-title" content="DormCo Mgmt">
+    <meta name="description" content="DormCo Management Dashboard for managing orders, pallets, and schools">
     <meta name="format-detection" content="telephone=no">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="msapplication-config" content="/browserconfig.xml">
@@ -56,6 +56,171 @@
                     });
             });
         }
+    </script>
+    
+    <!-- PWA Install Instructions -->
+    <script>
+        // Check if app is already installed
+        function isAppInstalled() {
+            return window.matchMedia('(display-mode: standalone)').matches || 
+                   window.navigator.standalone === true;
+        }
+        
+        // Show install instructions if not already installed
+        function showInstallInstructions() {
+            if (isAppInstalled()) return;
+            
+            // Check if user has dismissed the instructions before
+            if (localStorage.getItem('pwa-install-dismissed') === 'true') return;
+            
+            // Create the popup
+            const popup = document.createElement('div');
+            popup.id = 'pwa-install-popup';
+            popup.innerHTML = `
+                <div class="pwa-install-overlay">
+                    <div class="pwa-install-modal">
+                        <div class="pwa-install-header">
+                            <h4><i class="fas fa-mobile-alt"></i> Install DormCo Mgmt</h4>
+                            <button type="button" class="btn-close" onclick="dismissInstallPopup()"></button>
+                        </div>
+                        <div class="pwa-install-body">
+                            <p>Install this app on your device for a better experience:</p>
+                            <div class="install-steps">
+                                <div class="step">
+                                    <strong>iPhone (Safari):</strong>
+                                    <ol>
+                                        <li>Tap the <i class="fas fa-share"></i> Share button at the bottom</li>
+                                        <li>Scroll down and tap "Add to Home Screen"</li>
+                                        <li>Tap "Add" to install</li>
+                                    </ol>
+                                </div>
+                                <div class="step">
+                                    <strong>Android (Chrome):</strong>
+                                    <ol>
+                                        <li>Tap the <i class="fas fa-plus"></i> menu button</li>
+                                        <li>Select "Add to Home screen" or "Install app"</li>
+                                        <li>Tap "Add" or "Install" to confirm</li>
+                                    </ol>
+                                </div>
+                                <div class="step">
+                                    <strong>Desktop (Chrome/Edge):</strong>
+                                    <ol>
+                                        <li>Look for the <i class="fas fa-download"></i> install icon in the address bar</li>
+                                        <li>Click "Install" when prompted</li>
+                                        <li>Or use the menu → "Install DormCo Mgmt"</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pwa-install-footer">
+                            <button type="button" class="btn btn-secondary" onclick="dismissInstallPopup()">
+                                Maybe Later
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="dismissInstallPopup()">
+                                Got It!
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add styles
+            const style = document.createElement('style');
+            style.textContent = `
+                .pwa-install-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.5);
+                    z-index: 9999;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 20px;
+                }
+                .pwa-install-modal {
+                    background: white;
+                    border-radius: 10px;
+                    max-width: 500px;
+                    width: 100%;
+                    max-height: 80vh;
+                    overflow-y: auto;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                }
+                .pwa-install-header {
+                    padding: 20px 20px 0;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+                .pwa-install-header h4 {
+                    margin: 0;
+                    color: #022350;
+                }
+                .pwa-install-body {
+                    padding: 20px;
+                }
+                .install-steps {
+                    margin-top: 15px;
+                }
+                .step {
+                    margin-bottom: 20px;
+                    padding: 15px;
+                    background: #f8f9fa;
+                    border-radius: 8px;
+                    border-left: 4px solid #022350;
+                }
+                .step strong {
+                    color: #022350;
+                    display: block;
+                    margin-bottom: 10px;
+                }
+                .step ol {
+                    margin: 0;
+                    padding-left: 20px;
+                }
+                .step li {
+                    margin-bottom: 5px;
+                }
+                .pwa-install-footer {
+                    padding: 0 20px 20px;
+                    display: flex;
+                    gap: 10px;
+                    justify-content: flex-end;
+                }
+                @media (max-width: 576px) {
+                    .pwa-install-modal {
+                        margin: 10px;
+                        max-height: 90vh;
+                    }
+                    .pwa-install-header, .pwa-install-body, .pwa-install-footer {
+                        padding: 15px;
+                    }
+                }
+            `;
+            
+            document.head.appendChild(style);
+            document.body.appendChild(popup);
+        }
+        
+        // Dismiss the popup
+        function dismissInstallPopup() {
+            const popup = document.getElementById('pwa-install-popup');
+            if (popup) {
+                popup.remove();
+            }
+            // Remember that user dismissed it
+            localStorage.setItem('pwa-install-dismissed', 'true');
+        }
+        
+        // Show popup after a delay (only on first visit)
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                showInstallInstructions();
+            }, 3000); // Show after 3 seconds
+        });
     </script>
 </head>
 <body>
@@ -120,6 +285,9 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="#" onclick="showInstallInstructions(); return false;">
+                                        <i class="fas fa-mobile-alt"></i> Add to Home Screen
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

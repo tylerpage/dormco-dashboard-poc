@@ -18,21 +18,21 @@
                 </div>
             @endif
 
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
+                <div class="mb-3 mb-md-0 flex-grow-1">
                     <h2>Order #{{ $order->order_number }}</h2>
                     <p class="text-muted mb-0">{{ $order->customer_name }} - {{ $order->customer_email }}</p>
                 </div>
-                <div>
-                    <a href="{{ route('orders.index') }}" class="btn btn-outline-secondary">Back to Orders</a>
-                    <a href="{{ route('orders.edit', $order) }}" class="btn btn-primary">Edit Order</a>
+                <div class="d-flex flex-column flex-md-row gap-2">
+                    <a href="{{ route('orders.index') }}" class="btn btn-outline-secondary w-md-auto">Back to Orders</a>
+                    <a href="{{ route('orders.edit', $order) }}" class="btn btn-primary w-md-auto">Edit Order</a>
                     @if(auth()->user()->role === 'school' && auth()->user()->assigned_schools && !in_array($order->school_id, auth()->user()->assigned_schools))
                         <!-- School user cannot verify this order -->
                     @else
                     <form action="{{ route('orders.toggle-verification', $order) }}" method="POST" class="d-inline">
                         @csrf
                         <input type="hidden" name="verified" value="{{ $order->verified ? '0' : '1' }}">
-                        <button type="submit" class="btn btn-{{ $order->verified ? 'warning' : 'success' }}">
+                        <button type="submit" class="btn btn-{{ $order->verified ? 'warning' : 'success' }} w-md-auto">
                             <i class="fas fa-{{ $order->verified ? 'times' : 'check' }}"></i>
                             {{ $order->verified ? 'Unverify' : 'Verify' }} Order
                         </button>

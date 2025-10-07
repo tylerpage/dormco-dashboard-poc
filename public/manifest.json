@@ -1,7 +1,7 @@
 {
-  "name": "Dormco Dashboard",
-  "short_name": "Dormco",
-  "description": "Dormco Admin Dashboard for managing orders, pallets, and schools",
+  "name": "DormCo Mgmt",
+  "short_name": "DormCo Mgmt",
+  "description": "DormCo Management Dashboard for managing orders, pallets, and schools",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
