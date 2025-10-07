@@ -98,17 +98,27 @@ use Illuminate\Support\Facades\Storage;
                     <div class="card mb-4">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">Pallet Photos ({{ $pallet->photos->count() }})</h5>
-                            <a href="{{ route('pallets.upload-photo', $pallet) }}" class="btn btn-sm btn-outline-primary">
-                                Upload Photo
-                            </a>
+                            <div>
+                                @if($pallet->photos->count() > 0)
+                                    <a href="{{ route('pallets.photos', $pallet) }}" class="btn btn-sm btn-outline-primary me-2">
+                                        <i class="fas fa-images"></i>
+                                        View All Photos
+                                    </a>
+                                @endif
+                                <a href="{{ route('pallets.upload-photo', $pallet) }}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-upload"></i>
+                                    Upload Photo
+                                </a>
+                            </div>
                         </div>
                         <div class="card-body">
                             @forelse($pallet->photos as $photo)
                             <div class="row border-bottom py-3">
                                 <div class="col-md-4">
-                                    <img src="{{ $photo->getSignedUrl() }}" alt="Pallet Photo" 
-                                         class="img-thumbnail w-100" style="max-height: 200px; object-fit: cover; cursor: pointer;"
-                                         data-bs-toggle="modal" data-bs-target="#imageModal{{ $photo->id }}">
+                                    <a href="{{ route('pallets.photos.show', [$pallet, $photo]) }}">
+                                        <img src="{{ $photo->getSignedUrl() }}" alt="Pallet Photo" 
+                                             class="img-thumbnail w-100" style="max-height: 200px; object-fit: cover; cursor: pointer;">
+                                    </a>
                                 </div>
                                 <div class="col-md-8">
                                     <div class="d-flex justify-content-between">
@@ -130,35 +140,6 @@ use Illuminate\Support\Facades\Storage;
                                 </div>
                             </div>
 
-                            <!-- Image Modal for {{ $photo->id }} -->
-                            <div class="modal fade" id="imageModal{{ $photo->id }}" tabindex="-1" aria-labelledby="imageModal{{ $photo->id }}Label" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Pallet Photo</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                        </div>
-                                        <div class="modal-body text-center">
-                                            <img src="{{ $photo->getSignedUrl() }}" 
-                                                 alt="Pallet Photo" class="img-fluid" style="max-height: 70vh;">
-                                            <div class="mt-3">
-                                                <strong>Uploaded by:</strong> {{ $photo->uploadedBy->name }}<br>
-                                                <strong>Date:</strong> {{ $photo->created_at->format('M j, Y g:i A') }}
-                                                @if($photo->notes)
-                                                    <br><strong>Notes:</strong> {{ $photo->notes }}
-                                                @endif
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-danger" 
-                                                    onclick="deletePhoto({{ $photo->id }}, '{{ $photo->photo_path }}')">
-                                                <i class="fas fa-trash"></i> Delete Photo
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             @empty
                             <p class="text-muted">No photos uploaded for this pallet.</p>
                             @endforelse
@@ -437,6 +418,25 @@ function printQRCode(palletNumber) {
         }, 1000);
     };
 }
+
+// Force modal z-index after Bootstrap initializes
+document.addEventListener('DOMContentLoaded', function() {
+    // Listen for modal show events and force z-index
+    document.addEventListener('show.bs.modal', function(event) {
+        const modal = event.target;
+        modal.style.zIndex = '1055';
+        
+        const dialog = modal.querySelector('.modal-dialog');
+        if (dialog) {
+            dialog.style.zIndex = '1056';
+        }
+        
+        const content = modal.querySelector('.modal-content');
+        if (content) {
+            content.style.zIndex = '1057';
+        }
+    });
+});
 
 </script>
 

@@ -144,7 +144,7 @@
         margin-left: 280px !important;
         width: calc(100% - 280px) !important;
         position: relative;
-        z-index: 1;
+        z-index: 10;
     }
     
     .container-fluid {
@@ -255,38 +255,19 @@
     }
 }
 
-// Modal z-index fixes - Higher than sidebar (1050)
+// Modal z-index fixes - Standard Bootstrap values
 .modal {
-    z-index: 1060 !important;
-    
-    .modal-backdrop {
-        z-index: 1055 !important;
-    }
-    
-    .modal-dialog {
-        z-index: 1061 !important;
-    }
-    
-    .modal-content {
-        z-index: 1062 !important;
-    }
+    z-index: 1055;
 }
 
-// Ensure modal backdrop is behind modal content
 .modal-backdrop {
-    z-index: 1055 !important;
+    z-index: 1050;
 }
 
-// Fix for image modals specifically
-.modal.show {
-    display: block !important;
-    z-index: 1060 !important;
+.modal-dialog {
+    z-index: 1056;
 }
 
-.modal.show .modal-dialog {
-    z-index: 1061 !important;
-}
-
-.modal.show .modal-content {
-    z-index: 1062 !important;
+.modal-content {
+    z-index: 1057;
 }

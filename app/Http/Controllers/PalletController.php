@@ -417,4 +417,30 @@ class PalletController extends Controller
             return redirect()->back()->with('error', 'Error unverifying order: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Show all photos for a pallet
+     */
+    public function photos(Pallet $pallet)
+    {
+        $pallet->load(['photos.uploadedBy']);
+        return view('pallets.photos', compact('pallet'));
+    }
+
+    /**
+     * Show a specific photo for a pallet
+     */
+    public function showPhoto(Pallet $pallet, $photoId)
+    {
+        $photo = $pallet->photos()->findOrFail($photoId);
+        $pallet->load(['photos.uploadedBy']);
+        
+        // Get current photo index for navigation
+        $photos = $pallet->photos;
+        $currentIndex = $photos->search(function($item) use ($photo) {
+            return $item->id === $photo->id;
+        });
+        
+        return view('pallets.photo-detail', compact('pallet', 'photo', 'currentIndex', 'photos'));
+    }
 }

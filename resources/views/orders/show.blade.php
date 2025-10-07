@@ -145,19 +145,29 @@ use Illuminate\Support\Facades\Storage;
                     <div class="card mb-4">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">Order Photos ({{ $order->photos->count() }})</h5>
-                            @if(auth()->user()->role !== 'school')
-                            <a href="{{ route('orders.upload-photos', $order) }}" class="btn btn-sm btn-outline-primary">
-                                Upload Photos
-                            </a>
-                            @endif
+                            <div>
+                                @if($order->photos->count() > 0)
+                                    <a href="{{ route('orders.photos', $order) }}" class="btn btn-sm btn-outline-primary me-2">
+                                        <i class="fas fa-images"></i>
+                                        View All Photos
+                                    </a>
+                                @endif
+                                @if(auth()->user()->role !== 'school')
+                                <a href="{{ route('orders.upload-photos', $order) }}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-upload"></i>
+                                    Upload Photos
+                                </a>
+                                @endif
+                            </div>
                         </div>
                         <div class="card-body">
                             @forelse($order->photos as $photo)
                             <div class="row border-bottom py-3">
                                 <div class="col-md-3">
-                                    <img src="{{ $photo->getSignedUrl() }}" alt="Order Photo" 
-                                         class="img-thumbnail" style="max-width: 150px; max-height: 150px; cursor: pointer;"
-                                         data-bs-toggle="modal" data-bs-target="#imageModal{{ $photo->id }}">
+                                    <a href="{{ route('orders.photos.show', [$order, $photo]) }}">
+                                        <img src="{{ $photo->getSignedUrl() }}" alt="Order Photo" 
+                                             class="img-thumbnail" style="max-width: 150px; max-height: 150px; cursor: pointer;">
+                                    </a>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="d-flex justify-content-between">
@@ -181,37 +191,6 @@ use Illuminate\Support\Facades\Storage;
                                 </div>
                             </div>
 
-                            <!-- Image Modal for {{ $photo->id }} -->
-                            <div class="modal fade" id="imageModal{{ $photo->id }}" tabindex="-1" aria-labelledby="imageModal{{ $photo->id }}Label" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Order Photo</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                        </div>
-                                        <div class="modal-body text-center">
-                                            <img src="{{ $photo->getSignedUrl() }}" 
-                                                 alt="Order Photo" class="img-fluid" style="max-height: 70vh;">
-                                            <div class="mt-3">
-                                                <strong>Uploaded by:</strong> {{ $photo->uploadedBy->name }}<br>
-                                                <strong>Date:</strong> {{ $photo->created_at->format('M j, Y g:i A') }}
-                                                @if($photo->notes)
-                                                    <br><strong>Notes:</strong> {{ $photo->notes }}
-                                                @endif
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            @if(auth()->user()->role !== 'school')
-                                            <button type="button" class="btn btn-danger" 
-                                                    onclick="deletePhoto({{ $photo->id }}, '{{ $photo->photo_path }}')">
-                                                <i class="fas fa-trash"></i> Delete Photo
-                                            </button>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             @empty
                             <p class="text-muted">No photos uploaded for this order.</p>
                             @endforelse
@@ -330,7 +309,6 @@ use Illuminate\Support\Facades\Storage;
 </div>
 
 
-
 <script>
 function deletePhoto(photoId, photoPath) {
     if (confirm('Are you sure you want to delete this photo? This action cannot be undone.')) {
@@ -358,5 +336,25 @@ function deletePhoto(photoId, photoPath) {
         form.submit();
     }
 }
+
+// Force modal z-index after Bootstrap initializes
+document.addEventListener('DOMContentLoaded', function() {
+    // Listen for modal show events and force z-index
+    document.addEventListener('show.bs.modal', function(event) {
+        const modal = event.target;
+        modal.style.zIndex = '1055';
+        
+        const dialog = modal.querySelector('.modal-dialog');
+        if (dialog) {
+            dialog.style.zIndex = '1056';
+        }
+        
+        const content = modal.querySelector('.modal-content');
+        if (content) {
+            content.style.zIndex = '1057';
+        }
+    });
+});
+
 </script>
 @endsection

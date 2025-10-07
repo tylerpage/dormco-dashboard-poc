@@ -542,4 +542,46 @@ class OrderController extends Controller
 
         return redirect()->back()->with('success', $message);
     }
+
+    /**
+     * Show all photos for an order
+     */
+    public function photos(Order $order)
+    {
+        // School users can only see orders from their assigned schools
+        $user = Auth::user();
+        if ($user->role === 'school' && $user->assigned_schools) {
+            if (!in_array($order->school_id, $user->assigned_schools)) {
+                abort(403, 'You can only view orders from your assigned schools.');
+            }
+        }
+
+        $order->load(['photos.uploadedBy']);
+        return view('orders.photos', compact('order'));
+    }
+
+    /**
+     * Show a specific photo for an order
+     */
+    public function showPhoto(Order $order, $photoId)
+    {
+        // School users can only see orders from their assigned schools
+        $user = Auth::user();
+        if ($user->role === 'school' && $user->assigned_schools) {
+            if (!in_array($order->school_id, $user->assigned_schools)) {
+                abort(403, 'You can only view orders from your assigned schools.');
+            }
+        }
+
+        $photo = $order->photos()->findOrFail($photoId);
+        $order->load(['photos.uploadedBy']);
+        
+        // Get current photo index for navigation
+        $photos = $order->photos;
+        $currentIndex = $photos->search(function($item) use ($photo) {
+            return $item->id === $photo->id;
+        });
+        
+        return view('orders.photo-detail', compact('order', 'photo', 'currentIndex', 'photos'));
+    }
 }

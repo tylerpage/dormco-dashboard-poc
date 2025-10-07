@@ -27,6 +27,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('orders/{order}/update-shipping', [OrderController::class, 'updateShipping'])->name('orders.update-shipping.store');
     Route::get('orders/{order}/upload-photos', [OrderController::class, 'showUploadPhotos'])->name('orders.upload-photos');
     Route::post('orders/{order}/upload-photos', [OrderController::class, 'uploadPhotos'])->name('orders.upload-photos.store');
+    Route::get('orders/{order}/photos', [OrderController::class, 'photos'])->name('orders.photos');
+    Route::get('orders/{order}/photos/{photo}', [OrderController::class, 'showPhoto'])->name('orders.photos.show');
     Route::delete('order-photos/{photo}', [OrderController::class, 'deletePhoto'])->name('order-photos.delete');
     Route::post('orders/{order}/toggle-verification', [OrderController::class, 'toggleVerification'])->name('orders.toggle-verification');
     Route::resource('orders', OrderController::class);
@@ -40,6 +42,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('pallets/{pallet}/orders', [PalletController::class, 'orders'])->name('pallets.orders');
         Route::get('pallets/{pallet}/upload-photo', [PalletController::class, 'showUploadPhoto'])->name('pallets.upload-photo');
         Route::post('pallets/{pallet}/upload-photo', [PalletController::class, 'uploadPhoto'])->name('pallets.upload-photo.store');
+        Route::get('pallets/{pallet}/photos', [PalletController::class, 'photos'])->name('pallets.photos');
+        Route::get('pallets/{pallet}/photos/{photo}', [PalletController::class, 'showPhoto'])->name('pallets.photos.show');
         Route::delete('pallet-photos/{photo}', [PalletController::class, 'deletePhoto'])->name('pallet-photos.delete');
         Route::post('pallets/{pallet}/verify-order/{order}', [PalletController::class, 'verifyOrder'])->name('pallets.verify-order');
         Route::post('pallets/{pallet}/unverify-order/{order}', [PalletController::class, 'unverifyOrder'])->name('pallets.unverify-order');
