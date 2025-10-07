@@ -313,7 +313,7 @@
 
 <!-- Update Shipping Modal -->
 <div class="modal fade" id="updateShippingModal" tabindex="-1" aria-labelledby="updateShippingModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-sm-down modal-lg">
         <div class="modal-content">
             <form action="{{ route('orders.update-shipping', $order) }}" method="POST">
                 @csrf
@@ -370,17 +370,17 @@
                         </div>
                         
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-4 col-12 mb-3">
                                 <label for="shipping_city" class="form-label">City <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="shipping_city" name="shipping_city" 
                                        value="{{ $order->shipping_city }}" required>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4 col-12 mb-3">
                                 <label for="shipping_state" class="form-label">State <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="shipping_state" name="shipping_state" 
                                        value="{{ $order->shipping_state }}" required>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4 col-12 mb-3">
                                 <label for="shipping_zip" class="form-label">ZIP Code <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="shipping_zip" name="shipping_zip" 
                                        value="{{ $order->shipping_zip }}" required>

@@ -113,7 +113,7 @@
                                     </div>
                                     
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-4 col-12 mb-3">
                                             <label for="shipping_city" class="form-label">City <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control @error('shipping_city') is-invalid @enderror" 
                                                    id="shipping_city" name="shipping_city" value="{{ old('shipping_city') }}" required>
@@ -121,7 +121,7 @@
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-4 col-12 mb-3">
                                             <label for="shipping_state" class="form-label">State <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control @error('shipping_state') is-invalid @enderror" 
                                                    id="shipping_state" name="shipping_state" value="{{ old('shipping_state') }}" required>
@@ -129,7 +129,7 @@
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-4 col-12 mb-3">
                                             <label for="shipping_zip" class="form-label">ZIP Code <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control @error('shipping_zip') is-invalid @enderror" 
                                                    id="shipping_zip" name="shipping_zip" value="{{ old('shipping_zip') }}" required>

@@ -209,7 +209,7 @@
 
 <!-- QR Scanner Modal -->
 <div class="modal fade" id="qrScannerModal" tabindex="-1" aria-labelledby="qrScannerModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-sm-down">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Scan QR Code</h5>
@@ -217,7 +217,7 @@
             </div>
             <div class="modal-body">
                 <div class="text-center">
-                    <div id="qr-reader" style="width: 100%; max-width: 500px; margin: 0 auto;"></div>
+                    <div id="qr-reader" style="width: 100%; max-width: 100%; margin: 0 auto; min-height: 300px;"></div>
                     <div id="qr-reader-results" class="mt-3" style="display: none;">
                         <div class="alert alert-info">
                             <strong>QR Code Detected:</strong>
@@ -260,8 +260,9 @@ document.addEventListener('DOMContentLoaded', function() {
             "qr-reader",
             { 
                 fps: 10, 
-                qrbox: { width: 250, height: 250 },
-                aspectRatio: 1.0
+                qrbox: { width: 300, height: 300 },
+                aspectRatio: 1.0,
+                supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
             },
             /* verbose= */ false
         );
